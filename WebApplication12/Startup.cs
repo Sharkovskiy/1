@@ -6,6 +6,7 @@ using System.Net;
 using System;
 using System.Collections.Generic;
 using WebApplication12.Models;
+using WebApplication12.Lists;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication12
@@ -24,6 +25,8 @@ namespace WebApplication12
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ListOfGoods>();
+            services.AddScoped<ListOfSortedGoods>();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddControllers(); 
