@@ -9,11 +9,13 @@ namespace WebApplication12.Controllers
     {
         private readonly ListOfGoods _listOfGoods;
         private readonly ListOfSortedGoods _listOfSortedGoods;
+        private readonly Logic _logic;
 
-        public GoodsController(ListOfGoods listOfGoods, ListOfSortedGoods listOfSortedGoods)
+        public GoodsController(ListOfGoods listOfGoods, ListOfSortedGoods listOfSortedGoods, Logic logic)
         {
             _listOfGoods = listOfGoods;
             _listOfSortedGoods = listOfSortedGoods;
+            _logic = logic;
         }
 
         [HttpGet]
@@ -32,9 +34,10 @@ namespace WebApplication12.Controllers
                 _listOfSortedGoods.Sorting(size, maxprice, _listOfGoods.GetListOfGoods(), highlight);
                 try
                 {
-                    return JsonConvert.SerializeObject(_listOfSortedGoods.GetListOfSortedGoods()) +
-                        "\nMinimum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Min(a => a.Price) +
-                        "\nMaximum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Max(a => a.Price);
+                return JsonConvert.SerializeObject(_listOfSortedGoods.GetListOfSortedGoods()) +
+                    "\nMinimum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Min(a => a.Price) +
+                    "\nMaximum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Max(a => a.Price) +
+                    "\nMost common words : \n" + _logic.MostCommonWords(_listOfSortedGoods.GetListOfSortedGoods());
 
                 }
                 catch (InvalidOperationException) {

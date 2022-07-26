@@ -27,6 +27,7 @@ namespace WebApplication12
         {
             services.AddScoped<ListOfGoods>();
             services.AddScoped<ListOfSortedGoods>();
+            services.AddScoped<Logic>();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddControllers(); 
