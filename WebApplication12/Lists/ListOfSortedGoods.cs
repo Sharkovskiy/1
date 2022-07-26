@@ -5,94 +5,45 @@ namespace WebApplication12.Lists
     {
         private static readonly List<Product> sort = new List<Product>();
 
-        public List<Product> GetListOfSortedGoods() {
+        public List<Product> GetListOfSortedGoods()
+        {
             return sort;
         }
 
-        public void SortSizeAndMaxPrice(String size, int maxprice, List<GoodStructure> goodsList, String highlight)
+        public void Sorting(String size, int maxprice, List<GoodStructure> goodsList, String[] highlight)
         {
-            //if (size?.Length >= 0 && maxprice > 0)
-            //{
-            //    for (int i = 0; i < goodsList[0].Products.Length; i++)
-            //    {
-            //        for (int j = 0; j < goodsList[0].Products[i].Sizes.Length; i++)
-            //        {
-            //            if (goodsList[0].Products[i].Price <= maxprice && goodsList[0].Products[i].Sizes[j] == size)
-            //            {
-            //                sort.Add(goodsList[0].Products[i]);
-            //            }
-            //        }
-            //    }
-            //}
-            //if (size?.Length >= 0 && maxprice == 0)
-            //{
-            //    for (int i = 0; i < goodsList[0].Products.Length; i++)
-            //    {
-            //        for (int j = 0; j < goodsList[0].Products[i].Sizes.Length; i++)
-            //        {
-            //            if (goodsList[0].Products[i].Sizes[j] == size)
-            //            {
-            //                sort.Add(goodsList[0].Products[i]);
-            //            }
-            //        }
-            //    }
-            //}
-            //if (size?.Length == null && maxprice > 0)
-            //{
-            //    for (int i = 0; i < goodsList[0].Products.Length; i++)
-            //    {
-            //        if (goodsList[0].Products[i].Price <= maxprice)
-            //        {
-            //            sort.Add(goodsList[0].Products[i]);
-            //        }
-            //    }
-            //}
-            //if (highlight != null) {
-            //    for (int i = 0; i < goodsList[0].Products.Length; i++)
-            //    {
-            //        sort.Add(new Product { Title = goodsList[0].Products[i].Title,
-            //            Price = goodsList[0].Products[i].Price,
-            //            Sizes = goodsList[0].Products[i].Sizes,
-            //            Description = goodsList[0].Products[i].Description.Replace(highlight, "<em>" + highlight + "</em>")});
-            //    }
-            //}
-
-            var sorted = from goods in goodsList[0].Products
-                         select goods;
-
-            //if (size.Length >= 0 && maxprice == 0){
-            //    for (int i = 0; i < goodsList[0].Products.Length; i++)
-            //    {
-            //        for (int j = 0; j < goodsList[0].Products[i].Sizes.Length; i++)
-            //        {
-            //            if (goodsList[0].Products[i].Sizes[j] == size)
-            //            {
-            //                sorted = sorted.Where(x => x.Sizes[j] == size);
-            //            }
-            //        }
-            //    }
-            //}
-
-
-
-
-            if (size == null && maxprice != 0) { 
-            sorted = sorted.Where(x => x.Price <= maxprice);
-            }
+                var sorted = from goods in goodsList[0].Products
+                             from sizes in goods.Sizes
+                             where (goods.Price <= maxprice && size == null) ||
+                             (goods.Price <= maxprice && sizes == size) ||
+                             (maxprice == 0 && sizes == size)
+                             select goods;
 
             foreach (var good in sorted)
             {
-                if (highlight != null)
+                if (highlight.Length == 1)
                 {
                     sort.Add(new Product
                     {
                         Title = good.Title,
                         Price = good.Price,
                         Sizes = good.Sizes,
-                        Description = good.Description.Replace(highlight, "<em>" + highlight + "</em>")
+                        Description = good.Description.Replace(highlight[0], "<em>" + highlight[0] + "</em>")
                     });
                 }
-                else {
+                if (highlight.Length == 2)
+                {
+                    sort.Add(new Product
+                    {
+                        Title = good.Title,
+                        Price = good.Price,
+                        Sizes = good.Sizes,
+                        Description = good.Description.Replace(highlight[0], "<em>" + highlight[0] + "</em>")
+                        .Replace(highlight[1], "<em>" + highlight[1] + "</em>")
+                    });
+                }
+                if (highlight.Length == 0)
+                {
                     sort.Add(new Product
                     {
                         Title = good.Title,
@@ -102,7 +53,6 @@ namespace WebApplication12.Lists
                     });
                 }
             }
-
         }
     }
 }

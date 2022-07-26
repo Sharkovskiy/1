@@ -16,7 +16,6 @@ namespace WebApplication12.Controllers
             _listOfSortedGoods = listOfSortedGoods;
         }
 
-
         [HttpGet]
         public String GetGood()
         {
@@ -24,21 +23,23 @@ namespace WebApplication12.Controllers
         }
 
         [HttpGet("filter")]
-        public String GetGood(String? size, int maxprice, String highlight)
+        public String GetGood(String? size, int maxprice, String[] highlight)
         {
-            if (size != null || maxprice != 0 || highlight != null)
-            {
                 if (_listOfSortedGoods.GetListOfSortedGoods() is not null)
                 {
                     _listOfSortedGoods.GetListOfSortedGoods().Clear();
                 }
-                _listOfSortedGoods.SortSizeAndMaxPrice(size, maxprice, _listOfGoods.GetListOfGoods(), highlight);
+                _listOfSortedGoods.Sorting(size, maxprice, _listOfGoods.GetListOfGoods(), highlight);
+                try
+                {
+                    return JsonConvert.SerializeObject(_listOfSortedGoods.GetListOfSortedGoods()) +
+                        "\nMinimum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Min(a => a.Price) +
+                        "\nMaximum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Max(a => a.Price);
 
-                return JsonConvert.SerializeObject(_listOfSortedGoods.GetListOfSortedGoods()) +
-                    "\nMinimum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Min(a => a.Price) + 
-                    "\nMaximum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Max(a => a.Price);
-            }
-            else return JsonConvert.SerializeObject(_listOfGoods.GetListOfGoods()[0].Products);
+                }
+                catch (InvalidOperationException) {
+                    return JsonConvert.SerializeObject(_listOfGoods.GetListOfGoods()[0].Products);
+                }
         }
     }
 }
