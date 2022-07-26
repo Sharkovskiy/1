@@ -1,4 +1,5 @@
-﻿using WebApplication12.Models;
+﻿using System.Linq;
+using WebApplication12.Models;
 
 namespace WebApplication12.Lists
 {
@@ -9,12 +10,13 @@ namespace WebApplication12.Lists
             String ArString = "";
             foreach (Product product in list) {
                 ArString += product.Description.Replace(".", "") + " ";
+                //ArString.Replace("  ", "");
             }
             string[] SplitedStr = ArString.Split(new char[] { ' ' });
 
             Dictionary<string, int> dictionary = new Dictionary<string, int>();
 
-            foreach (string s in SplitedStr)
+            foreach (string s in SplitedStr.SkipLast(1))
             {
                 if (dictionary.Keys.Contains(s)) dictionary[s]++;
                 else dictionary.Add(s, 1);
@@ -33,5 +35,7 @@ namespace WebApplication12.Lists
             }
             return output;
         }
+
+
     }
 }
