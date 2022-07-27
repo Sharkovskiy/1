@@ -37,9 +37,11 @@ namespace WebApplication12.Controllers
                 return JsonConvert.SerializeObject(_listOfSortedGoods.GetListOfSortedGoods()) +
                     "\nMinimum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Min(a => a.Price) +
                     "\nMaximum price of products : " + _listOfSortedGoods.GetListOfSortedGoods().Max(a => a.Price) +
-                    "\nMost common words : \n" + _logic.MostCommonWords(_listOfSortedGoods.GetListOfSortedGoods());
+                    "\nMost common words : \n" + _logic.MostCommonWords(_listOfSortedGoods.GetListOfSortedGoods()) +
+                    "Size of all Products : \n" + _logic.AllSizeOfAllProducts(_listOfSortedGoods.GetListOfSortedGoods());
 
-                }
+
+            }
                 catch (InvalidOperationException) {
                     return JsonConvert.SerializeObject(_listOfGoods.GetListOfGoods()[0].Products);
                 }

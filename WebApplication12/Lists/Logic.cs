@@ -10,7 +10,6 @@ namespace WebApplication12.Lists
             String ArString = "";
             foreach (Product product in list) {
                 ArString += product.Description.Replace(".", "") + " ";
-                //ArString.Replace("  ", "");
             }
             string[] SplitedStr = ArString.Split(new char[] { ' ' });
 
@@ -36,6 +35,20 @@ namespace WebApplication12.Lists
             return output;
         }
 
-
+        public String AllSizeOfAllProducts(List<Product> list) {
+            string? allSizes = "";
+            
+            string?[,] strings = new string[list.Count, 3];
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < list[i].Sizes.Length; j++)
+                {
+                    strings[i, j] = list[i].Sizes[j]; 
+                    allSizes += strings[i,j] + " ";
+                }
+                allSizes += "\n";
+            }
+            return allSizes;
+        }    
     }
 }
